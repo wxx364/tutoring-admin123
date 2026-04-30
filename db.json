@@ -1,0 +1,17 @@
+{
+  "accounts": [
+    { "id": "1", "name": "王老师", "phone": "13800138001", "role": "teacher", "subjects": ["钢琴", "舞蹈"], "createdAt": "2026-04-20 10:30" },
+    { "id": "2", "name": "李主任", "phone": "13900139001", "role": "admin", "subjects": [], "createdAt": "2026-04-18 14:20" },
+    { "id": "3", "name": "张老师", "phone": "13700137001", "role": "teacher", "subjects": ["书法"], "createdAt": "2026-04-22 09:15" },
+    { "id": "4", "name": "陈家长", "phone": "13600136001", "role": "parent", "subjects": [], "createdAt": "2026-04-25 16:45" }
+  ],
+  "students": [
+    { "id": "s001", "name": "张小明", "subject": "钢琴", "remainingHours": 48 },
+    { "id": "s002", "name": "张小华", "subject": "钢琴", "remainingHours": 42 },
+    { "id": "s003", "name": "李小红", "subject": "舞蹈", "remainingHours": 36 }
+  ],
+  "checkins": [
+    { "id": "c001", "studentId": "s001", "studentName": "张小明", "subject": "钢琴", "checkinAt": "2026-04-30 09:00", "status": "present" },
+    { "id": "c002", "studentId": "s002", "studentName": "张小华", "subject": "钢琴", "checkinAt": "2026-04-30 09:15", "status": "present" }
+  ]
+}

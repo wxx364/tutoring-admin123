@@ -1,0 +1,10 @@
+{
+  "/api/accounts": "/accounts",
+  "/api/accounts/:id": "/accounts/:id",
+  "/api/students": "/students",
+  "/api/students/:id": "/students/:id",
+  "/api/checkins": "/checkins",
+  "/api/checkins/:id": "/checkins/:id",
+  "/api/courses": "/courses",
+  "/api/courses/:id": "/courses/:id"
+}

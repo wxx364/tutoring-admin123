@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Mock server data (演示数据，不含真实信息)
+# db.json 可以保留，因为是演示数据
+
+# Lock files (可选，看个人习惯)
+# package-lock.json
