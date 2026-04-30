@@ -8,7 +8,7 @@ const API_BASE_URL = 'http://localhost:3001/api'
 // 'demo' - 内存模拟（不推荐，数据不持久化）
 // 'local' - 调用本地 json-server（推荐，数据持久化到 db.json）
 // 'cloud' - 调用微信云开发（需要 AppID 和云开发环境）
-const API_MODE = 'local'
+const API_MODE = 'demo'
 
 // 模拟延迟（仅用于 demo 模式）
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
