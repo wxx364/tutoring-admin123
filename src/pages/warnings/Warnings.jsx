@@ -71,9 +71,9 @@ export default function Warnings() {
 
       <Card>
         <Tabs items={[
-          { key: 'low', label: '课时不足预警', children: <Table columns={columns.low} dataSource={lowHoursData} rowKey="id" pagination={false} /> },
-          { key: 'expire', label: '即将过期', children: <Table columns={columns.expire} dataSource={expireData} rowKey="id" pagination={false} /> },
-          { key: 'absent', label: '长期旷课', children: <Table columns={columns.absent} dataSource={absentData} rowKey="id" pagination={false} /> }
+          { key: 'low', label: '课时不足预警', children: <Table columns={columns.low} dataSource={lowHoursData} rowKey="id" pagination={false} scroll={{ x: 800 }} style={{ overflowX: 'auto' }} /> },
+          { key: 'expire', label: '即将过期', children: <Table columns={columns.expire} dataSource={expireData} rowKey="id" pagination={false} scroll={{ x: 800 }} style={{ overflowX: 'auto' }} /> },
+          { key: 'absent', label: '长期旷课', children: <Table columns={columns.absent} dataSource={absentData} rowKey="id" pagination={false} scroll={{ x: 800 }} style={{ overflowX: 'auto' }} /> }
         ]} />
       </Card>
     </div>

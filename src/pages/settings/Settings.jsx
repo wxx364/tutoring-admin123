@@ -1,4 +1,5 @@
 import { Card, Tabs, Form, Input, InputNumber, Switch, Select, Button, Table, Divider, message } from 'antd'
+import StaffManagement from './StaffManagement'
 
 const packageData = [
   { id: 1, name: '期中衔接班', subjects: '数学、物理', hours: 20, price: 600, validMonths: 3, status: 'active' },
@@ -77,18 +78,14 @@ export default function Settings() {
             children: (
               <div>
                 <Button type="primary" style={{ marginBottom: 16 }}>新增套餐</Button>
-                <Table columns={packageColumns} dataSource={packageData} rowKey="id" pagination={false} />
+                <Table columns={packageColumns} dataSource={packageData} rowKey="id" pagination={false} scroll={{ x: 800 }} style={{ overflowX: 'auto' }} />
               </div>
             )
           },
           {
             key: 'staff',
             label: '员工管理',
-            children: (
-              <div style={{ padding: 40, textAlign: 'center', color: '#999' }}>
-                员工账号管理功能开发中...
-              </div>
-            )
+            children: <StaffManagement />
           }
         ]} />
       </Card>

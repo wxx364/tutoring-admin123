@@ -217,6 +217,8 @@ export default function Students() {
             selectedRowKeys,
             onChange: setSelectedRowKeys
           }}
+          scroll={{ x: 1200 }}
+          style={{ overflowX: 'auto' }}
         />
       </Card>
 

@@ -90,6 +90,8 @@ export default function ClassAttendance() {
           dataSource={students} 
           rowKey="id"
           pagination={false}
+          scroll={{ x: 800 }}
+          style={{ overflowX: 'auto' }}
           summary={() => (
             <Table.Summary.Row>
               <Table.Summary.Cell index={0} colSpan={3}>

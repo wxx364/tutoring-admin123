@@ -71,14 +71,98 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .table-actions-left {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .table-actions-right {
   display: flex;
   gap: 8px;
+}
+
+/* ==================== 响应式适配 ==================== */
+
+/* 手机端 (< 768px) */
+@media (max-width: 767px) {
+  .page-container {
+    padding: 12px;
+  }
+  
+  /* 表格操作栏垂直排列 */
+  .table-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .table-actions-left,
+  .table-actions-right {
+    width: 100%;
+  }
+  
+  .table-actions-left .ant-input,
+  .table-actions-left .ant-select,
+  .table-actions-right .ant-btn {
+    flex: 1;
+  }
+  
+  /* 统计卡片 */
+  .stat-value {
+    font-size: 24px;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+  }
+  
+  /* 卡片标题 */
+  .card-title {
+    font-size: 15px;
+  }
+}
+
+/* 平板端 (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .page-container {
+    padding: 20px;
+  }
+}
+
+/* 电脑端 (>= 1024px) */
+@media (min-width: 1024px) {
+  .page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+}
+
+/* ==================== 移动端触摸优化 ==================== */
+@media (hover: none) and (pointer: coarse) {
+  /* 增大点击区域 */
+  .ant-btn:not(.ant-btn-link),
+  .ant-menu-item,
+  .ant-dropdown-menu-item,
+  .ant-pagination-item,
+  .ant-select-item {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  
+  /* 表格行增大 */
+  .ant-table-row {
+    min-height: 48px;
+  }
+  
+  /* 链接增大 */
+  a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
 }

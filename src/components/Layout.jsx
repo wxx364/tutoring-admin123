@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { Layout as AntLayout, Menu, Dropdown, Avatar, Button, Badge } from 'antd'
+import { Layout as AntLayout, Menu, Avatar, Badge, Button } from 'antd'
 import { 
   UserOutlined, 
   TeamOutlined, 
@@ -59,37 +59,52 @@ export default function Layout() {
     return '/students'
   }
 
+  // 侧边栏菜单内容
+  const menuContent = (
+    <Menu
+      mode="inline"
+      selectedKeys={[getSelectedKey()]}
+      items={menuItems}
+      onClick={handleMenuClick}
+      style={{ borderRight: 0 }}
+    />
+  )
+
   return (
     <AntLayout style={{ minHeight: '100vh' }}>
+      {/* 侧边栏 - 所有设备保持相同排版 */}
       <Sider 
         collapsible 
         collapsed={collapsed} 
         onCollapse={setCollapsed}
-        style={{ background: '#fff' }}
+        style={{ background: '#fff', overflow: 'auto' }}
+        width={200}
+        collapsedWidth={80}
+        breakpoint={null}
+        trigger={null}
       >
         <div style={{ 
           height: 64, 
           display: 'flex', 
           alignItems: 'center', 
           justifyContent: 'center',
-          borderBottom: '1px solid #f0f0f0'
+          borderBottom: '1px solid #f0f0f0',
+          padding: '0 16px'
         }}>
           <span style={{ 
             fontSize: collapsed ? 16 : 18, 
             fontWeight: 700, 
-            color: '#4A7BF7' 
+            color: '#4A7BF7',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
           }}>
             {collapsed ? '课时' : '课时管理系统'}
           </span>
         </div>
-        <Menu
-          mode="inline"
-          selectedKeys={[getSelectedKey()]}
-          items={menuItems}
-          onClick={handleMenuClick}
-          style={{ borderRight: 0 }}
-        />
+        {menuContent}
       </Sider>
+
       <AntLayout>
         <Header style={{ 
           padding: '0 24px', 
@@ -97,23 +112,39 @@ export default function Layout() {
           display: 'flex', 
           alignItems: 'center',
           justifyContent: 'space-between',
-          boxShadow: '0 1px 4px rgba(0,0,0,0.08)'
+          boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 100
         }}>
-          <div style={{ fontSize: 16, fontWeight: 500 }}>
+          <div style={{ 
+            fontSize: 18, 
+            fontWeight: 500
+          }}>
             {menuItems.find(m => m.key === getSelectedKey())?.label || '首页'}
           </div>
+          
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <Badge count={3} size="small">
-              <Button icon={<BellOutlined />} type="text" />
+              <Button 
+                icon={<BellOutlined />} 
+                type="text"
+                style={{ fontSize: 18 }}
+              />
             </Badge>
-            <Dropdown menu={{ items: userMenuItems, onClick: handleUserMenuClick }}>
-              <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <Avatar icon={<UserOutlined />} style={{ background: '#4A7BF7' }} />
-                <span>{user?.name || '管理员'}</span>
-              </div>
-            </Dropdown>
+            <Menu
+              mode="horizontal"
+              selectable={false}
+              items={[{ 
+                key: 'user',
+                icon: <Avatar icon={<UserOutlined />} style={{ background: '#4A7BF7' }} />,
+                label: user?.name || '管理员'
+              }]}
+              onClick={handleUserMenuClick}
+            />
           </div>
         </Header>
+        
         <Content style={{ background: '#f5f6fa' }}>
           <Outlet />
         </Content>

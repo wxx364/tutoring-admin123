@@ -1,5 +1,6 @@
 import { Card, Tabs, Table, DatePicker, Button, Row, Col, Statistic } from 'antd'
 import { BarChartOutlined, LineChartOutlined, PieChartOutlined } from '@ant-design/icons'
+import FinanceReport from './FinanceReport'
 
 const dailyData = [
   { date: '2026-04-24', classCount: 3, oneOnOneCount: 2, eveningCount: 5, totalHours: 18, totalStudents: 10 },
@@ -60,19 +61,19 @@ export default function Reports() {
                     <DatePicker.RangePicker style={{ marginRight: 16 }} />
                     <Button>导出Excel</Button>
                   </div>
-                  <Table columns={columns.daily} dataSource={dailyData} rowKey="date" />
+                  <Table columns={columns.daily} dataSource={dailyData} rowKey="date" scroll={{ x: 800 }} style={{ overflowX: 'auto' }} />
                 </div>
               ) 
             },
             { 
               key: 'teacher', 
               label: '老师业绩', 
-              children: <Table columns={columns.teacher} dataSource={teacherData} rowKey="rank" /> 
+              children: <Table columns={columns.teacher} dataSource={teacherData} rowKey="rank" scroll={{ x: 800 }} style={{ overflowX: 'auto' }} /> 
             },
             { 
               key: 'finance', 
               label: '财务对账', 
-              children: <div style={{ padding: 40, textAlign: 'center', color: '#999' }}>财务报表开发中...</div> 
+              children: <FinanceReport /> 
             }
           ]} 
         />

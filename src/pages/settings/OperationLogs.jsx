@@ -41,6 +41,8 @@ export default function OperationLogs() {
           dataSource={logData} 
           rowKey="id"
           pagination={{ pageSize: 20 }}
+          scroll={{ x: 800 }}
+          style={{ overflowX: 'auto' }}
         />
       </Card>
     </div>
