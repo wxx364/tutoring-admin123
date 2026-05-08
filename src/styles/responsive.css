@@ -1,0 +1,141 @@
+/* 响应式设计 - 纯缩放模式 */
+/* 保持 PC 排版不变，只在不同设备上整体缩放 */
+
+/* ==================== 通用容器 ==================== */
+.page-container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ==================== 强制禁用 Ant Design 移动端响应式行为 ==================== */
+
+/* 1. 侧边栏：永远显示，不隐藏、不变成抽屉 */
+.ant-layout-sider {
+  min-width: 80px !important;
+  max-width: 200px !important;
+  flex: "0 0 200px" !important;
+}
+.ant-layout-sider-collapsed {
+  min-width: 80px !important;
+  max-width: 80px !important;
+  flex: "0 0 80px" !important;
+}
+
+/* 2. 表格：强制横向表格，禁止卡片式展开 */
+.ant-table-wrapper {
+  overflow-x: auto !important;
+}
+.ant-table {
+  display: table !important;
+}
+.ant-table-thead > tr,
+.ant-table-tbody > tr {
+  display: table-row !important;
+}
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td {
+  display: table-cell !important;
+  white-space: nowrap;
+}
+
+/* 3. 禁用 antd 的描述列表式渲染（手机端表格变竖排的根源） */
+.ant-descriptions-item-label,
+.ant-descriptions-item-content {
+  display: inline-block !important;
+}
+
+/* ==================== 登录页 - 始终保持 PC 布局 ==================== */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.login-card {
+  width: 420px;
+  max-width: 100%;
+}
+
+/* 表单保持横排 */
+.ant-form-item {
+  margin-bottom: 24px;
+}
+
+/* 按钮组保持横排 */
+.btn-group,
+.btn-group-mobile {
+  display: flex;
+  gap: 12px;
+}
+
+/* 搜索栏保持横排 */
+.search-bar,
+.search-bar-mobile {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.search-bar .ant-input,
+.search-bar .ant-select,
+.search-bar-mobile .ant-input,
+.search-bar-mobile .ant-select {
+  width: 200px;
+}
+
+/* 统计卡片保持多列 */
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+/* ==================== 整体缩放适配 ==================== */
+/* 屏幕宽度小于 1400px 时整体缩小 */
+@media (max-width: 1399px) {
+  .page-container {
+    padding: 20px;
+    max-width: 100%;
+  }
+}
+
+/* 屏幕宽度小于 1024px 时稍微缩放 */
+@media (max-width: 1023px) {
+  .page-container {
+    padding: 16px;
+  }
+  
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 屏幕宽度小于 768px 时保持排版，只缩放间距 */
+@media (max-width: 767px) {
+  .page-container {
+    padding: 12px;
+  }
+  
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .login-card {
+    width: 100%;
+    max-width: 420px;
+  }
+  
+  /* 表单仍然横排，只是缩短宽度 */
+  .ant-form-item {
+    margin-bottom: 16px;
+  }
+  
+  .btn-group,
+  .btn-group-mobile {
+    gap: 8px;
+  }
+}
