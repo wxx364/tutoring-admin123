@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   Card, 
   Table, 
@@ -29,11 +29,16 @@ import { accountApi } from '../../utils/api'
 const { Option } = Select
 const { useBreakpoint } = Grid
 
-// 瑙掕壊閫夐」
+// 角色选项
 const ROLE_OPTIONS = [
-  { value: 'teacher', label: '鑰佸笀', color: 'blue' },
-  { value: 'admin', label: '绠＄悊鍛?, color: 'red' },
-  { value: 'parent', label: '瀹堕暱', color: 'green' }
+  { value: 'teacher', label: '老师', color: 'blue' },
+  { value: 'admin', label: '管理员', color: 'red' },
+  { value: 'parent', label: '家长', color: 'green' }
+]
+
+// 科目选项
+const SUBJECT_OPTIONS = [
+  '钢琴', '美术', '书法', '围棋', '美术', '英语', '数学', '语文'
 ]
 
 export default function Accounts() {
@@ -43,10 +48,11 @@ export default function Accounts() {
   const [editingAccount, setEditingAccount] = useState(null)
   const [form] = Form.useForm()
   
-  // 鍝嶅簲寮忥紙宸茬粺涓€涓?PC 鎺掔増锛屼繚鐣欏彉閲忛伩鍏嶆姤閿欙級
+  // 响应式（统一PC排版，保持变量避免报错）
   const screens = useBreakpoint()
     
-  // 鎼滅储鍜岀瓫閫夌姸鎬?  const [searchKeyword, setSearchKeyword] = useState('')
+  // 搜索和筛选状态
+  const [searchKeyword, setSearchKeyword] = useState('')
   const [filterRole, setFilterRole] = useState('all')
   const [pagination, setPagination] = useState({
     current: 1,
@@ -54,7 +60,7 @@ export default function Accounts() {
     total: 0
   })
 
-  // 鍔犺浇璐﹀彿鍒楄〃
+  // 加载账号列表
   useEffect(() => {
     loadAccounts()
   }, [pagination.current, pagination.pageSize, searchKeyword, filterRole])
@@ -76,17 +82,17 @@ export default function Accounts() {
           total: result.data.total
         }))
       } else {
-        message.error(result.msg || '鍔犺浇澶辫触')
+        message.error(result.msg || '加载失败')
       }
     } catch (err) {
-      message.error('缃戠粶閿欒锛岃閲嶈瘯')
+      message.error('网络错误，请重试')
       console.error(err)
     } finally {
       setLoading(false)
     }
   }
 
-  // 鎵撳紑鏂板/缂栬緫寮圭獥
+  // 打开新增/编辑弹窗
   const openModal = (record = null) => {
     setEditingAccount(record)
     if (record) {
@@ -102,72 +108,72 @@ export default function Accounts() {
     setModalVisible(true)
   }
 
-  // 鍏抽棴寮圭獥
+  // 关闭弹窗
   const closeModal = () => {
     setModalVisible(false)
     setEditingAccount(null)
     form.resetFields()
   }
 
-  // 淇濆瓨璐﹀彿
+  // 保存账号
   const handleSave = async (values) => {
     try {
       let result
       
       if (editingAccount) {
-        // 缂栬緫
+        // 编辑
         result = await accountApi.update(editingAccount.id, values)
       } else {
-        // 鏂板
+        // 新增
         result = await accountApi.create(values)
       }
       
       if (result.code === 0) {
-        message.success(editingAccount ? '璐﹀彿鏇存柊鎴愬姛' : '璐﹀彿鍒涘缓鎴愬姛')
+        message.success(editingAccount ? '账号更新成功' : '账号创建成功')
         closeModal()
-        loadAccounts() // 鍒锋柊鍒楄〃
+        loadAccounts() // 刷新列表
       } else {
-        message.error(result.msg || '淇濆瓨澶辫触')
+        message.error(result.msg || '保存失败')
       }
     } catch (err) {
-      message.error('缃戠粶閿欒锛岃閲嶈瘯')
+      message.error('网络错误，请重试')
       console.error(err)
     }
   }
 
-  // 鍒犻櫎璐﹀彿
+  // 删除账号
   const handleDelete = async (id) => {
     try {
       const result = await accountApi.delete(id)
       
       if (result.code === 0) {
-        message.success('璐﹀彿鍒犻櫎鎴愬姛')
-        loadAccounts() // 鍒锋柊鍒楄〃
+        message.success('账号删除成功')
+        loadAccounts() // 刷新列表
       } else {
-        message.error(result.msg || '鍒犻櫎澶辫触')
+        message.error(result.msg || '删除失败')
       }
     } catch (err) {
-      message.error('缃戠粶閿欒锛岃閲嶈瘯')
+      message.error('网络错误，请重试')
       console.error(err)
     }
   }
 
-  // 閲嶇疆鎼滅储
+  // 重置搜索
   const handleReset = () => {
     setSearchKeyword('')
     setFilterRole('all')
     setPagination(prev => ({ ...prev, current: 1 }))
   }
 
-  // 琛ㄦ牸鍒嗛〉鍙樺寲
+  // 表格分页变化
   const handleTableChange = (newPagination) => {
     setPagination(newPagination)
   }
 
-  // 琛ㄦ牸鍒楀畾涔夛紙妗岄潰绔級
+  // 表格列定义（桌面端）
   const desktopColumns = [
     {
-      title: '濮撳悕',
+      title: '姓名',
       dataIndex: 'name',
       key: 'name',
       render: (text) => (
@@ -178,7 +184,7 @@ export default function Accounts() {
       )
     },
     {
-      title: '鎵嬫満鍙?,
+      title: '手机号',
       dataIndex: 'phone',
       key: 'phone',
       render: (text) => (
@@ -189,7 +195,7 @@ export default function Accounts() {
       )
     },
     {
-      title: '瑙掕壊',
+      title: '角色',
       dataIndex: 'role',
       key: 'role',
       render: (role) => {
@@ -202,7 +208,7 @@ export default function Accounts() {
       }
     },
     {
-      title: '鏁欐巿绉戠洰',
+      title: '教授科目',
       dataIndex: 'subjects',
       key: 'subjects',
       render: (subjects) => (
@@ -214,12 +220,12 @@ export default function Accounts() {
       )
     },
     {
-      title: '鍒涘缓鏃堕棿',
+      title: '创建时间',
       dataIndex: 'createdAt',
       key: 'createdAt'
     },
     {
-      title: '鎿嶄綔',
+      title: '操作',
       key: 'action',
       width: 200,
       render: (_, record) => (
@@ -229,69 +235,18 @@ export default function Accounts() {
             icon={<EditOutlined />} 
             onClick={() => openModal(record)}
           >
-            缂栬緫
+            编辑
           </Button>
           <Popconfirm
-            title="纭畾鍒犻櫎姝よ处鍙凤紵"
-            description="鍒犻櫎鍚庤鐢ㄦ埛灏嗘棤娉曠櫥褰曞皬绋嬪簭"
+            title="确定删除此账号？"
+            description="删除后该用户将无法登录小程序"
             onConfirm={() => handleDelete(record.id)}
-            okText="鍒犻櫎"
-            cancelText="鍙栨秷"
+            okText="删除"
+            cancelText="取消"
             okButtonProps={{ danger: true }}
           >
             <Button type="text" danger icon={<DeleteOutlined />}>
-              鍒犻櫎
-            </Button>
-          </Popconfirm>
-        </Space>
-      )
-    }
-  ]
-
-  // 琛ㄦ牸鍒楀畾涔夛紙绉诲姩绔畝鍖栫増锛?  const mobileColumns = [
-    {
-      title: '璐﹀彿淇℃伅',
-      key: 'info',
-      render: (_, record) => (
-        <div>
-          <div style={{ fontWeight: 500, marginBottom: 4 }}>
-            <UserOutlined style={{ marginRight: 4 }} />
-            {record.name}
-          </div>
-          <div style={{ fontSize: 12, color: '#666', marginBottom: 4 }}>
-            {record.phone}
-          </div>
-          <div>
-            <Tag color={ROLE_OPTIONS.find(r => r.value === record.role)?.color || 'default'}>
-              {ROLE_OPTIONS.find(r => r.value === record.role)?.label || record.role}
-            </Tag>
-          </div>
-        </div>
-      )
-    },
-    {
-      title: '鎿嶄綔',
-      key: 'action',
-      width: 100,
-      render: (_, record) => (
-        <Space direction="vertical" size="small">
-          <Button 
-            type="text" 
-            size="small"
-            icon={<EditOutlined />} 
-            onClick={() => openModal(record)}
-          >
-            缂栬緫
-          </Button>
-          <Popconfirm
-            title="纭畾鍒犻櫎锛?
-            onConfirm={() => handleDelete(record.id)}
-            okText="鍒?
-            cancelText="鍚?
-            okButtonProps={{ danger: true, size: 'small' }}
-          >
-            <Button type="text" danger size="small" icon={<DeleteOutlined />}>
-              鍒犻櫎
+              删除
             </Button>
           </Popconfirm>
         </Space>
@@ -302,7 +257,7 @@ export default function Accounts() {
   return (
     <div style={{ padding: 24 }}>
       <Card
-        title="璐﹀彿绠＄悊"
+        title="账号管理"
         extra={
           <Button 
             type="primary" 
@@ -310,12 +265,12 @@ export default function Accounts() {
             onClick={() => openModal()}
             size={'large'}
           >
-            {'鏂板璐﹀彿'}
+            新增账号
           </Button>
         }
         bodyStyle={{ padding: 24 }}
       >
-        {/* 鎼滅储鍜岀瓫閫?*/}
+        {/* 搜索和筛选 */}
         <Row 
           gutter={[12, 12]} 
           style={{ marginBottom: 16 }}
@@ -323,7 +278,7 @@ export default function Accounts() {
         >
           <Col xs={24} sm={12} md={8} lg={6}>
             <Input
-              placeholder="鎼滅储濮撳悕鎴栨墜鏈哄彿"
+              placeholder="搜索姓名或手机号"
               prefix={<SearchOutlined />}
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
@@ -339,7 +294,7 @@ export default function Accounts() {
               style={{ width: '100%' }}
               size={'large'}
             >
-              <Option value="all">鍏ㄩ儴瑙掕壊</Option>
+              <Option value="all">全部角色</Option>
               {ROLE_OPTIONS.map(option => (
                 <Option key={option.value} value={option.value}>
                   {option.label}
@@ -352,9 +307,8 @@ export default function Accounts() {
               icon={<ReloadOutlined />} 
               onClick={handleReset}
               size={'large'}
-              
             >
-              {'閲嶇疆绛涢€?}
+              重置筛选
             </Button>
           </Col>
         </Row>
@@ -366,11 +320,10 @@ export default function Accounts() {
           loading={loading}
           scroll={{ x: 'max-content' }}
           style={{ overflowX: 'auto' }}
-          style={{ overflowX: 'auto' }}
           pagination={{
             ...pagination,
             showSizeChanger: true,
-            showTotal: (total) => `鍏?${total} 鏉,
+            showTotal: (total) => `共 ${total} 条`,
             pageSizeOptions: [5, 10, 20, 50],
             size: 'default'
           }}
@@ -379,14 +332,14 @@ export default function Accounts() {
         />
       </Card>
 
-      {/* 鏂板/缂栬緫寮圭獥 */}
+      {/* 新增/编辑弹窗 */}
       <Modal
-        title={editingAccount ? '缂栬緫璐﹀彿' : '鏂板璐﹀彿'}
+        title={editingAccount ? '编辑账号' : '新增账号'}
         open={modalVisible}
         onCancel={closeModal}
         onOk={() => form.submit()}
-        okText="淇濆瓨"
-        cancelText="鍙栨秷"
+        okText="保存"
+        cancelText="取消"
         width={500}
         style={{ top: 100 }}
         bodyStyle={{ 
@@ -405,11 +358,11 @@ export default function Accounts() {
         >
           <Form.Item
             name="name"
-            label="濮撳悕"
-            rules={[{ required: true, message: '璇疯緭鍏ュ鍚? }]}
+            label="姓名"
+            rules={[{ required: true, message: '请输入姓名' }]}
           >
             <Input 
-              placeholder="渚嬪锛氱帇鑰佸笀" 
+              placeholder="例如：张老师" 
               prefix={<UserOutlined />}
               size={'middle'}
             />
@@ -417,14 +370,14 @@ export default function Accounts() {
 
           <Form.Item
             name="phone"
-            label="鎵嬫満鍙?
+            label="手机号"
             rules={[
-              { required: true, message: '璇疯緭鍏ユ墜鏈哄彿' },
-              { pattern: /^1[3-9]\d{9}$/, message: '鎵嬫満鍙锋牸寮忎笉姝ｇ‘' }
+              { required: true, message: '请输入手机号' },
+              { pattern: /^1[3-9]\d{9}$/, message: '手机号格式不正确' }
             ]}
           >
             <Input 
-              placeholder="渚嬪锛?3800138000" 
+              placeholder="例如：13800138000" 
               prefix={<PhoneOutlined />} 
               maxLength={11}
               disabled={!!editingAccount}
@@ -434,11 +387,11 @@ export default function Accounts() {
 
           <Form.Item
             name="role"
-            label="瑙掕壊"
-            rules={[{ required: true, message: '璇烽€夋嫨瑙掕壊' }]}
+            label="角色"
+            rules={[{ required: true, message: '请选择角色' }]}
           >
             <Select 
-              placeholder="璇烽€夋嫨瑙掕壊"
+              placeholder="请选择角色"
               size={'middle'}
             >
               {ROLE_OPTIONS.map(option => (
@@ -459,22 +412,17 @@ export default function Accounts() {
                 return (
                   <Form.Item
                     name="subjects"
-                    label="鏁欐巿绉戠洰"
-                    rules={[{ required: true, message: '璇疯嚦灏戦€夋嫨涓€涓鐩? }]}
+                    label="教授科目"
+                    rules={[{ required: true, message: '请至少选择一个科目' }]}
                   >
                     <Select 
                       mode="multiple" 
-                      placeholder="璇烽€夋嫨鏁欐巿绉戠洰"
+                      placeholder="请选择教授科目"
                       size={'middle'}
                     >
-                      <Option value="閽㈢惔">閽㈢惔</Option>
-                      <Option value="鑸炶箞">鑸炶箞</Option>
-                      <Option value="涔︽硶">涔︽硶</Option>
-                      <Option value="鍥存">鍥存</Option>
-                      <Option value="缇庢湳">缇庢湳</Option>
-                      <Option value="鑻辫">鑻辫</Option>
-                      <Option value="鏁板">鏁板</Option>
-                      <Option value="璇枃">璇枃</Option>
+                      {SUBJECT_OPTIONS.map(subj => (
+                        <Option key={subj} value={subj}>{subj}</Option>
+                      ))}
                     </Select>
                   </Form.Item>
                 )
@@ -485,12 +433,12 @@ export default function Accounts() {
 
           <Form.Item
             name="password"
-            label={editingAccount ? '鏂板瘑鐮侊紙鐣欑┖琛ㄧず涓嶄慨鏀癸級' : '鍒濆瀵嗙爜'}
-            rules={[{ required: !editingAccount, message: '璇疯緭鍏ュ瘑鐮? }]}
-            extra={editingAccount ? '' : '榛樿 123456锛屽缓璁敤鎴烽娆＄櫥褰曞悗淇敼'}
+            label={editingAccount ? '新密码（留空表示不修改）' : '初始密码'}
+            rules={[{ required: !editingAccount, message: '请输入密码' }]}
+            extra={editingAccount ? '' : '默认 123456，建议用户首次登录后修改'}
           >
             <Input.Password 
-              placeholder={editingAccount ? '涓嶄慨鏀硅鐣欑┖' : '璇疯緭鍏?浣嶄互涓婂瘑鐮?}
+              placeholder={editingAccount ? '不修改请留空' : '请输入6位以上密码'}
               size={'middle'}
             />
           </Form.Item>
